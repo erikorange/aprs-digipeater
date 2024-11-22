@@ -7,19 +7,16 @@ This is an APRS digipeater consisting of:
 - Syba USB Stereo Soundcard adapter
 - VFAN USB GPS receiver
 - a custom interface board
-<br>
-<br>
 
 The FT-2600M has a DB9 port which provides access to:
 - Tx audio in
 - Rx audio out
 - PTT triggering when shorted to GND
 - GND
-<br>
-<br>
+
 ## Design
 direwolf is configured to use a GPIO output to trigger PTT. The interface board uses an optioisolator to electrically isolate the GPIO output from the DB9 PTT pin on the FT-2600M.  The Rx audio out from the DB9 is not used because the audio level is too low.  The FT-26600M speaker out is instead connected to the Pi's external soundcard input.  The external soundcard output is connected to the DB9 Tx audio in.
-<br><br>
+
 The interface board also has:
 - Red LED - illuminates when direworlf is transmitting
 - Green LED - stays illuminated as long as direwolf is running
