@@ -89,7 +89,11 @@ else
   echo "starting digipeater-mon"
   python digipeater-mon.py > digipeater-mon.log 2>&1 &
   echo "starting direwolf"
-  direwolf -t 0 -l /home/pi/aprslogs > direwolf_console.log 2>&1 &
+  # direwolf -t 0 -l /home/pi/aprslogs > direwolf_console.log 2>&1 &
+  now=$(date +"%m-%d-%Y")
+  aprslog="aprs-${now}.log"
+  consolelog="console-${now}.log"
+  direwolf -t 0 -L "/home/pi/aprslogs/${aprslog}" | tee "${consolelog}"
 fi
 ```
 
