@@ -71,6 +71,14 @@ cd ~
 mkdir aprslogs
 ```
 
+## APRS passcode
+Build and run this software to generate a valid APRS passcode. Add the passcode to the IGLOGIN line in direwolf.conf.
+```
+git clone https://github.com/nwdigitalradio/n7nix.git
+cd n7nix/direwolf
+gcc -o callpass callpass.c
+./callpass <your-digipeater-callsign>
+```
 
 ## python support for process monitoring
 ```
