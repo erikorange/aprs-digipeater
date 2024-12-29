@@ -34,8 +34,13 @@ sudo raspi-config
     System Options -> Audio -> USB PnP Sound device
     System Options -> Boot / Auto Login -> Console Autologin
     Advanced Options -> Expand Filesystem
-<reboot>
 ```
+Modify these lines as follows in `/etc/default/console-setup` to enlarge the fonts on the terminal display:
+```
+FONTFACE="Terminus"
+FONTSIZE="28x14"
+```
+Then reboot.
 
 ## direwolf prerequisite install
 ```
@@ -55,7 +60,7 @@ sudo apt-get install libgps-dev
 ```
 
 ## Modify text colors
-This is an optional step to allow the display of color text on a black background when using the `direwolf -t 1` option. Make these changes in `direworlf/src/textcolor.c`:
+This is an optional step to enable the display of color text on a black background when using the `direwolf -t 1` option. Make these changes in `direwolf/src/textcolor.c`:
 
 Change the second array element of this line from this:
 
@@ -69,11 +74,11 @@ Change the second array element of this line from this:
 
 `static const char *t_black[MAX_T+1]	= 	{ "", "\e[38;2;0;0;0m",`
 
-to this, which forces the black text to appear white:
+to this, which forces the black text to appear white on what will now be a black background:
 
 `static const char *t_black[MAX_T+1]	= 	{ "", "\e[38;2;255;255;255m",`
 
-Rebuild direwolf if you decide to make this change later after the initial direwolf build and install:
+If you choose to make this change _after_ the initial build and install of direwolf, then you must rebuild direwolf using these commands:
 ```
 cd ~/direwolf
 rm -rf build
