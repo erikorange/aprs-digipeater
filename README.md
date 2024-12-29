@@ -54,6 +54,36 @@ sudo apt-get install gpsd
 sudo apt-get install libgps-dev
 ```
 
+## Modify text colors
+This is an optional step to allow the display of color text on a black background when using the `direwolf -t 1` option. Make these changes in `direworlf/src/textcolor.c`:
+
+Change the second array element of this line from this:
+
+`static const char *t_background_white[MAX_T+1] = { "", "\e[48;2;255;255;255m",`
+
+to this, which forces the text background color to black:
+
+`static const char *t_background_white[MAX_T+1] = { "", "\e[48;2;0;0;0m",`
+
+Change the second array element of this line from this:
+
+`static const char *t_black[MAX_T+1]	= 	{ "", "\e[38;2;0;0;0m",`
+
+to this, which forces the black text to appear white:
+
+`static const char *t_black[MAX_T+1]	= 	{ "", "\e[38;2;255;255;255m",`
+
+Rebuild direwolf if you decide to make this change later after the initial direwolf build and install:
+```
+cd ~/direwolf
+rm -rf build
+mkdir build && cd build
+cmake -DUNITTEST=1 ..
+make -j4
+sudo make install
+```
+Otherwise, just continue with the next step.
+
 ## direwolf build
 The dev branch of direwolf is used in support of the GPIO fix required for later versions of the Raspberry Pi OS.
 ```
@@ -71,6 +101,14 @@ cd ~
 mkdir aprslogs
 ```
 
+## APRS passcode
+Build and run this software to generate a valid APRS passcode. Add the passcode to the IGLOGIN line in direwolf.conf.
+```
+git clone https://github.com/nwdigitalradio/n7nix.git
+cd n7nix/direwolf
+gcc -o callpass callpass.c
+./callpass <your-digipeater-callsign>
+```
 
 ## python support for process monitoring
 ```
@@ -89,7 +127,11 @@ else
   echo "starting digipeater-mon"
   python digipeater-mon.py > digipeater-mon.log 2>&1 &
   echo "starting direwolf"
-  direwolf -t 0 -l /home/pi/aprslogs > direwolf_console.log 2>&1 &
+  # direwolf -t 0 -l /home/pi/aprslogs > direwolf_console.log 2>&1 &
+  now=$(date +"%m-%d-%Y")
+  aprslog="aprs-${now}.log"
+  consolelog="console-${now}.log"
+  direwolf -t 1 -L "/home/pi/aprslogs/${aprslog}" | tee "${consolelog}"
 fi
 ```
 
